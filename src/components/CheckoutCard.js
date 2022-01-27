@@ -40,7 +40,7 @@ export default function CheckoutCard({product : {id,name,productType,image,price
   };
 
   return (
-    <Card className={classes.root}>
+    <Card key={id} className={classes.root}>
       <CardHeader
         action={
             <Typography

@@ -67,7 +67,7 @@ export default function Product({
   }
 
   return (
-    <Card className={classes.root}>
+    <Card  className={classes.root}>
       <CardHeader
         action={
             <Typography
@@ -86,7 +86,7 @@ export default function Product({
         image={image}
         title={name}
       />
-      <CardContent  key={id}>
+      <CardContent >
         <Typography variant="body2" color="textSecondary" component="p">
          {productType}
         </Typography>
@@ -96,7 +96,7 @@ export default function Product({
             <AddShoppingCart fontSize='large' ></AddShoppingCart>
         </IconButton>
         {Array(rating).fill().map((_,i) => (
-            <p>&#11088;</p>
+            <p key={i}>&#11088;</p>
         ))}
         <IconButton
           className={clsx(classes.expand, {
@@ -110,8 +110,8 @@ export default function Product({
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent  key={id}> 
-         <Typography paragraph>{description}r</Typography>
+        <CardContent > 
+         <Typography paragraph>{description}</Typography>
         </CardContent>
       </Collapse>
     </Card>
