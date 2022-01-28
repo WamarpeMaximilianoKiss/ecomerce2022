@@ -1,8 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -19,7 +17,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        www.playabrava.com.ar
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -64,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+const steps = ['Direccion del envio', 'Detalles del pago', 'Detalles de la orden de compra'];
 
 function getStepContent(step) {
   switch (step) {
@@ -111,11 +109,11 @@ export default function Checkout() {
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
+                  Gracias por tu compra.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order confirmation, and will
-                  send you an update when your order has shipped.
+                  Tu envio tiene el código #2001539.Ten enviaremos un email con tu confirmacion de la compra,
+                   y le mandaremos todas las actualizaciones del envio.
                 </Typography>
               </React.Fragment>
             ) : (
@@ -124,7 +122,7 @@ export default function Checkout() {
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
                     <Button onClick={handleBack} className={classes.button}>
-                      Back
+                      Atras
                     </Button>
                   )}
                   <Button
@@ -133,7 +131,7 @@ export default function Checkout() {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                    {activeStep === steps.length - 1 ? 'Confirmar compra' : 'Siguiente'}
                   </Button>
                 </div>
               </React.Fragment>
