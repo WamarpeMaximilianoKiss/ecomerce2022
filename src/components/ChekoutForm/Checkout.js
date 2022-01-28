@@ -1,4 +1,4 @@
-import React from 'react';
+/* import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
@@ -142,4 +142,39 @@ export default function Checkout() {
       </main>
     </React.Fragment>
   );
-}
+} */
+
+import {Step, Paper, StepLabel, Stepper, Typography } from '@material-ui/core';
+import React from 'react';
+import useStyles from "./styles";
+import { useState } from 'react';
+
+const Checkout = () => {
+
+  const classes = useStyles();
+  const [activeStep, setActiveStep] = useState(0);
+
+  const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep +1);
+  const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep -1);
+
+  const steps = ["Direccíon de envio","Datos de la tarjeta","Confirmación"];
+  return <>
+    <main className={classes.layout}>
+      <Paper className={classes.papper}>
+        <Typography component="h1" variant = "h4" align="center" >
+          Checkout
+        </Typography>
+        <Stepper activeStep={0} className={classes.stepper}>
+          {steps.map((label) => (
+            <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+                </Step>
+          ))
+          }
+        </Stepper>
+      </Paper>
+    </main>
+  </>;
+};
+
+export default Checkout;

@@ -10,10 +10,13 @@ import { auth } from './firebase';
 import { useStateValue } from './StateProvider';
 import { actionType } from './reducer';
 import Checkout from './components/ChekoutForm/Checkout';
+import reportWebVitals from './reportWebVitals';
 
 function App() {
   
   const [{user}, dispatch] = useStateValue();
+
+
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       console.log(authUser);
@@ -26,6 +29,9 @@ function App() {
       }
     })
   },[])
+
+  reportWebVitals(console.log)
+
   return (
     <Router>
       <div className="App">
@@ -35,7 +41,6 @@ function App() {
             <Route path="/signin" element={<SignIn/>}/>
             <Route path="/signup" element={<SignUp/>}/>
             <Route path="/checkout" element={<Checkout/>}/>
-
             <Route path="/" element={<Products/>}/>
           </Routes>
       </div>
