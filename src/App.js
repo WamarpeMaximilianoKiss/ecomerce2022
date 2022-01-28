@@ -9,6 +9,7 @@ import {useEffect} from 'react';
 import { auth } from './firebase';
 import { useStateValue } from './StateProvider';
 import { actionType } from './reducer';
+import Checkout from './components/ChekoutForm/Checkout';
 
 function App() {
   
@@ -33,6 +34,7 @@ function App() {
             <Route path="/checkout-page" element={<CheckoutPage/>}/>
             <Route path="/signin" element={<SignIn/>}/>
             <Route path="/signup" element={<SignUp/>}/>
+            <Route path="/checkout" element={<Checkout/>}/>
 
             <Route path="/" element={<Products/>}/>
           </Routes>
