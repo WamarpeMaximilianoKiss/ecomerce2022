@@ -148,6 +148,8 @@ import {Step, Paper, StepLabel, Stepper, Typography } from '@material-ui/core';
 import React from 'react';
 import useStyles from "./styles";
 import { useState } from 'react';
+import PaymentForm from './PaymentForm';
+import AddressForm from './AddressForm';
 
 const Checkout = () => {
 
@@ -157,6 +159,8 @@ const Checkout = () => {
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep +1);
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep -1);
 
+  const Form = () => activeStep === 0 ? <AddressForm/> : <PaymentForm/>
+
   const steps = ["Direccíon de envio","Datos de la tarjeta","Confirmación"];
   return <>
     <main className={classes.layout}>
@@ -164,7 +168,7 @@ const Checkout = () => {
         <Typography component="h1" variant = "h4" align="center" >
           Checkout
         </Typography>
-        <Stepper activeStep={0} className={classes.stepper}>
+        <Stepper activeStep={activeStep} className={classes.stepper}>
           {steps.map((label) => (
             <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -172,6 +176,7 @@ const Checkout = () => {
           ))
           }
         </Stepper>
+        <Form/>
       </Paper>
     </main>
   </>;
