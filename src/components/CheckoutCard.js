@@ -8,7 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import accounting from 'accounting'
 import { IconButton } from '@material-ui/core';
-
+import { useStateValue } from '../StateProvider';
+import { actionType } from '../reducer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,13 +32,21 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function CheckoutCard({product : {id,name,productType,image,price,rating,description}}) {
+export default function CheckoutCard({
+    product : {id,name,productType,image,price,rating,description}
+  }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [{basket}, dispatch] = useStateValue();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const removeItem = () => dispatch({
+    type: actionType.REMOVE_ITEM,
+    id: id
+  })
 
   return (
     <Card key={id} className={classes.root}>
@@ -63,10 +72,10 @@ export default function CheckoutCard({product : {id,name,productType,image,price
       <CardActions disableSpacing className={classes.cardActions}>
         <div className={classes.cardRating}>
             {Array(rating).fill().map((_,i) => (
-                <p>&#11088;</p>
+                <p key={i}>&#11088;</p>
             ))}
         </div>
-        <IconButton>
+        <IconButton onClick={removeItem} >
         <DeleteIcon fontSize='large' />
 
         </IconButton>

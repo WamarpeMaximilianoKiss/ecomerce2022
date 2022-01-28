@@ -14,12 +14,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Products() {
   const classes = useStyles();
-  for (let index = 0; index < products.length; index++) {
-    const element = products[index].id;
-    console.log("id: ",element);
-    
-  }
-
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>

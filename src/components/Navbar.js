@@ -5,10 +5,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import logo from '../assets/logo.png';
-import MenuIcon from '@material-ui/icons/Menu';
 import {Button,Badge} from '@material-ui/core';
 import { ShoppingCart } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useStateValue } from '../StateProvider';
+import { auth } from '../firebase';
+import { actionType } from '../reducer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,25 +31,30 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "10px",
   }
 }));
-
- /* const Navbar = () => {
-    const classes = useStyles();
-    const [{basket,user}, dispatch] = useStateValue();
-    const history = useHistory();
-
-    const handleAuth = () =>{
-        if(user) {
-            auth.singOut();
-            dispatch({
-                type: actionTypes.EMPTY_BASQUET,
-                basket: [],
-            });
-            history.push("/");
-        } 
-    } */
   
   export default function Navbar(){
     const classes = useStyles();
+    const [{basket,user}, dispatch] = useStateValue();
+    const navigate = useNavigate(); 
+
+    const handAuth = () =>{
+      if(user){
+        auth.signOut();
+        dispatch({
+          type: actionType.EMTY_BASKET,
+          basket: [],
+        });
+        dispatch({
+          type: actionType.SET_USER,
+          user : null,
+        });
+          navigate('/')
+      }
+      else{
+        navigate('/signin')
+
+      }
+    }
 
   return (
     <div className={classes.root}>
@@ -66,17 +73,17 @@ const useStyles = makeStyles((theme) => ({
 
             <div className={classes.grow}/>
             <Typography variant='h6' color='textPrimary' component='p'>
-              Hola Invitado
+              Hola {user ? user.email : "Invitado"}
             </Typography>
             <div className={classes.button}>
-              <Link to={"sigin"}>
-                <Button>
-                  <strong>{1>0 ? "Sign Out" : "Sign In"}</strong>
+              <Link to={"signin"}>
+                <Button variant='outlined' onClick={handAuth}>
+                  <strong>{user ? "Sign Out" : "Sign In"}</strong>
                 </Button>
               </Link>
               <Link to="/checkout-page">
                 <IconButton aria-label='mostrar items del carrito' color = "inherit">
-                  <Badge badgeContent={5} color='secondary'>
+                  <Badge badgeContent={basket?.length} color='secondary'>
                     <ShoppingCart fontSize='large' color="primary"/>
                   </Badge>
                 </IconButton>

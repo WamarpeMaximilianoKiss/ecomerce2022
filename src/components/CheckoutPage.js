@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import CheckoutCard from "./CheckoutCard";
-//import Total from "/Total"
 import Total from "./Total";
 import {useStateValue} from '../StateProvider';
 
@@ -20,12 +19,11 @@ const CheckoutPage = () => {
     const cant = basket.length;
 
     function FormRow(){
-        console.log("cantidad: ", cant);
         return(
             <React.Fragment>
-                {basket?.map((prod) => (
-                    <Grid  key={prod.id} item xs={12} sm={8} md={6} lg={4}>
-                        <CheckoutCard key={prod.id} product={prod}/>
+                {basket?.map((prod,i) => (
+                    <Grid  key={i} item xs={12} sm={8} md={6} lg={4}>
+                        <CheckoutCard product={prod}/>
                     </Grid>
                 ))}
             </React.Fragment>
