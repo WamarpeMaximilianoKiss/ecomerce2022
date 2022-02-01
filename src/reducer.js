@@ -1,13 +1,15 @@
 export const initialState = {
     basket: [],
-    user: null
+    user: null,
+    shippingData: {}
 }
 
 export const actionType = {
     ADD_TO_BASKET: "ADD_TO_BASKET",
     REMOVE_ITEM: "REMOVE_ITEM",
     SET_USER: "SET_USER",
-    EMTY_BASKET: "EMPTY_BASKET"
+    EMTY_BASKET: "EMPTY_BASKET",
+    SET_SHIPPINGDATA: "SET_SHIPPINGDATA",
 }
 
 export const getBasketTotal = (basket) => {
@@ -44,6 +46,11 @@ const reducer = (state, action) => {
         return {
             ...state,
            basket: action.basket
+        };
+        case "SET_SHIPPINGDATA":
+        return {
+            ...state,
+           shippingData: action.shippingData
         };
         default: 
         console.log("default!!");

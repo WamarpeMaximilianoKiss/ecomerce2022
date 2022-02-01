@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {Link as RouteLink, useNavigate} from 'react-router-dom'
+import { Link as RouteLink, useNavigate } from 'react-router-dom'
 import { auth } from '../firebase';
 
 function Copyright() {
@@ -48,24 +48,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
-
-export default function SignIn() {
+export default function SignIn(user) {
   const classes = useStyles();
-  const [email,setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
+  console.log(user);
 
   const signin = (e) => {
     e.preventDefault();
-    auth.signInWithEmailAndPassword(email, password).then((auth) =>{
-          console.log(auth);
-          if(auth){
-              navigate('/')
-          }
-    }).catch(err =>alert(err.message))
-}
+    auth.signInWithEmailAndPassword(email, password).then((auth) => {
+      console.log(auth);
+      if (auth) {
+        navigate('/')
+      }
+    }).catch(err => alert(err.message))
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -88,7 +87,7 @@ export default function SignIn() {
             autoComplete="email"
             autoFocus
             value={email}
-            onChange={e=>setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -101,7 +100,7 @@ export default function SignIn() {
             id="password"
             autoComplete="current-password"
             value={password}
-            onChange={e=>setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
