@@ -54,14 +54,23 @@ export default function SignIn(user) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  console.log(user);
-
   const signin = (e) => {
     e.preventDefault();
+
     auth.signInWithEmailAndPassword(email, password).then((auth) => {
       console.log(auth);
+      console.log("holaa");
+
       if (auth) {
-        navigate('/')
+        debugger
+        if (email === "franco@franco.com") {
+
+          navigate('/admindashboard')
+        }
+        else {
+          navigate('/')
+
+        }
       }
     }).catch(err => alert(err.message))
   }

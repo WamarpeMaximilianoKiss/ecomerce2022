@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from 'react';
+import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -14,15 +14,15 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { AddShoppingCart } from '@material-ui/icons';
 import accounting from 'accounting';
 import { actionType } from '../reducer';
-import {useStateValue, useStateValues} from '../StateProvider';
- 
+import { useStateValue } from '../StateProvider';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
   },
   action: {
-      marginTop: "1rem",
+    marginTop: "1rem",
   },
   media: {
     height: 0,
@@ -41,79 +41,80 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Product({
-  product : {id,name,productType,image,price,rating,description}
+  product: { id, nombre, descripcion, importe_venta, categoria }
 }) {
   const classes = useStyles();
-  const [{basket}, dispatch] = useStateValue();
+  const [{ basket }, dispatch] = useStateValue();
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  const addToBasket = () =>{
+  const addToBasket = () => {
     dispatch({
       type: actionType.ADD_TO_BASKET,
       item: {
         id,
-        name,
-        productType,
-        image,
-        price,
-        rating,
-        description,
+        nombre,
+        descripcion,
+        importe_venta,
+        categoria,
       }
     })
   }
 
   return (
-    <Card  className={classes.root}>
-      <CardHeader
-        action={
+    <div>
+
+      <Card className={classes.root}>
+        <CardHeader
+          action={
             <Typography
-                className={classes.action}
-                variant = 'h5'
-                color = 'textSecondary'
+              className={classes.action}
+              color='textSecondary'
+
             >
-            {accounting.formatMoney(price)}
+              {accounting.formatMoney(importe_venta)}
             </Typography>
-        }
-        title={name}
-        subheader="en stock"
-      />
-      <CardMedia
-        className={classes.media}
-        image={image}
-        title={name}
-      />
-      <CardContent >
-        <Typography variant="body2" color="textSecondary" component="p">
-         {productType}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="agregar al carrito" onClick={addToBasket}>
-            <AddShoppingCart fontSize='large' ></AddShoppingCart>
-        </IconButton>
-        {Array(rating).fill().map((_,i) => (
-            <p key={i}>&#11088;</p>
-        ))}
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent > 
-         <Typography paragraph>{description}</Typography>
+          }
+          title={nombre}
+          subheader="en stock"
+        />
+        <CardMedia
+          className={classes.media}
+          image="https://rockcontent.com/es/wp-content/uploads/sites/3/2019/02/o-que-e-produto-no-mix-de-marketing-1024x538.png"
+          title={nombre}
+        />
+        <CardContent >
+          <Typography variant="body2" color="textSecondary" component="p">
+            {categoria}
+          </Typography>
         </CardContent>
-      </Collapse>
-    </Card>
+        <CardActions disableSpacing>
+          <IconButton aria-label="agregar al carrito" onClick={addToBasket}>
+            <AddShoppingCart fontSize='large' ></AddShoppingCart>
+          </IconButton>
+          {Array(5).fill().map((_, i) => (
+            <p key={i}>&#11088;</p>
+          ))}
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded,
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent >
+            <Typography paragraph>{descripcion}</Typography>
+          </CardContent>
+        </Collapse>
+      </Card>
+    </div>
   );
 }
