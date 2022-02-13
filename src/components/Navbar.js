@@ -32,9 +32,11 @@ const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
-  button: {
-    marginLeft: theme.spacing(2),
-  },
+  // button: {
+  //   marginLeft: theme.spacing(2),
+  //   display: "flex",
+  //   justifyContent: "center",
+  // },
   image: {
     marginRight: "10px",
   },
@@ -104,12 +106,8 @@ export default function Navbar() {
         return;
       }
     }
-
-
     setOpen(false);
   };
-
-
 
   function handleListKeyDown(event) {
     if (event.key === 'Tab') {
@@ -124,7 +122,6 @@ export default function Navbar() {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
-
     prevOpen.current = open;
   }, [open]);
 
@@ -133,86 +130,93 @@ export default function Navbar() {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
-          <Link to="/">
-            <IconButton >
-              <img
-                src={logo}
-                alt='Commerce.js'
-                height='70px'
-                className={classes.image}
-              />
-            </IconButton>
-          </Link>
-          <div className='tituloEmpresa' >
-            PLAYA BRAVA
-          </div>
+          <section className='containerNav' >
+            <div className='containerLogo'>
+              <Link to="/">
+                <IconButton >
+                  <img
+                    src={logo}
+                    alt='Commerce.js'
+                    height='70px'
+                    className={classes.image}
+                  />
+                </IconButton>
+              </Link>
 
-          <div className={classes.grow} />
-          <div className={classes.button} style={{ display: 'inline-flex' }}>
-
-
-            {user ? <div >
-              <Button
-                variant="outlined"
-                ref={anchorRef}
-                aria-controls={open ? 'menu-list-grow' : undefined}
-                aria-haspopup="true"
-                onClick={handleToggle}
-                className={classes.cuenta}
-
-              >
-                <Person />
-                {user.email}
-              </Button>
-              <Popper className={classes.itemmenucuenta} open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                  >
-
-                    <Paper style={{ width: '180px' }} >
-                      <div className={classes.itemmenucuenta}>
-                        <ClickAwayListener onClickAway={handleClose}>
-                          <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                            <MenuItem id="perfil" key={1} onClick={handleClose}>Perfil</MenuItem>
-                            <MenuItem id="cuenta" key={2} onClick={handleClose}>Mi cuenta</MenuItem>
-                            <Divider />
-                            <MenuItem id="salir" key={3} onClick={handleClose}>Salir</MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </div>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-            </div>
-              :
-              <div >
-                <Button
-                  variant="outlined"
-                  ref={anchorRef}
-                  aria-controls={open ? 'menu-list-grow' : undefined}
-                  aria-haspopup="true"
-                  onClick={handleClose}
-                  className={classes.cuenta}
-                  id="login"
-                >
-                  Iniciar sesión
-                </Button>
+              <div className='tituloEmpresa' >
+                PLAYA BRAVA
               </div>
-            }
+            </div>
+            <div className={classes.grow} />
 
-            <Link to="/checkout-page">
-              <IconButton aria-label='mostrar items del carrito' color="inherit">
-                <Badge badgeContent={basket?.length} color='secondary'>
-                  <ShoppingCart fontSize='large' color="primary" />
-                </Badge>
-              </IconButton>
-            </Link>
+
+            <div className='button' style={{ display: 'inline-flex' }}>
+              <div className='containerUserChart'>
+
+                {user ? <div >
+                  <Button
+                    variant="outlined"
+                    ref={anchorRef}
+                    aria-controls={open ? 'menu-list-grow' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
+                    className={classes.cuenta}
+
+                  >
+                    <Person />
+                    {user.email}
+                  </Button>
+                  <Popper className={classes.itemmenucuenta} open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+                      >
+
+                        <Paper style={{ width: '180px' }} >
+                          <div className={classes.itemmenucuenta}>
+                            <ClickAwayListener onClickAway={handleClose}>
+                              <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                                <MenuItem id="perfil" key={1} onClick={handleClose}>Perfil</MenuItem>
+                                <MenuItem id="cuenta" key={2} onClick={handleClose}>Mi cuenta</MenuItem>
+                                <Divider />
+                                <MenuItem id="salir" key={3} onClick={handleClose}>Salir</MenuItem>
+                              </MenuList>
+                            </ClickAwayListener>
+                          </div>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </div>
+                  :
+                  <div >
+                    <Button
+                      variant="outlined"
+                      ref={anchorRef}
+                      aria-controls={open ? 'menu-list-grow' : undefined}
+                      aria-haspopup="true"
+                      onClick={handleClose}
+                      className={classes.cuenta}
+                      id="login"
+                    >
+                      Iniciar sesión
+                    </Button>
+                  </div>
+                }
+
+                <Link to="/checkout-page">
+                  <IconButton aria-label='mostrar items del carrito' color="inherit">
+                    <Badge badgeContent={basket?.length} color='secondary'>
+                      <ShoppingCart fontSize='large' color="primary" />
+                    </Badge>
+                  </IconButton>
+                </Link>
+              </div>
+            </div>
+
             <Hidden smDown>
               <a
-
                 href="https://api.whatsapp.com/send?phone=5492664848147&text=Pulceras"
                 target='_blank'
                 rel="WhatsApp"
@@ -259,7 +263,7 @@ export default function Navbar() {
               </Link>
             </Hidden>
 
-          </div>
+          </section>
         </Toolbar>
       </AppBar>
     </div >

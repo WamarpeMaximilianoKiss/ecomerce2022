@@ -6,6 +6,45 @@
     letter-spacing: 3px; 
   }
 }
+@media screen and (max-width: 500px) {
+  .containerNav {
+    width: 100%;
+  }
+  .containerLogo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  .containerUserChart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
+@media screen and (min-width: 500px) {
+  .containerNav {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+  .containerLogo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  .containerUserChart {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+  }
+}
 
 /* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
 @media screen and (max-width: 600px) {
@@ -20,7 +59,6 @@
   padding: 0;
   
 }
-
 
 body {
   

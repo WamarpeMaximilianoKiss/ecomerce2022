@@ -3,7 +3,14 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react';
 
 const columns = [
-    { field: 'id', title: 'Id', type: "numeric" },
+    {
+        field: 'id', title: 'Id', type: "numeric", Header: () => (
+            <div
+                style={{
+                    textAlign: "left"
+                }}
+            >Ids</div>)
+    },
     { field: 'nombre', title: 'Nombre' },
     { field: 'categoria', title: 'Categoria' },
     { field: 'peso', title: 'Peso', type: "numeric" },
@@ -27,14 +34,6 @@ const AdminProducts = () => {
     const baseURL = "https://apiplayabrava.herokuapp.com/api/productos/productos";
     const [products, setProducts] = React.useState(null);
 
-    React.useEffect(() => {
-        axios.get(baseURL).then((response) => {
-            setProducts(response.data);
-            console.log("Productos :", response.data)
-        });
-    }, []);
-
-    console.log(products)
     return (
 
         < div >
