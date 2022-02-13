@@ -105,9 +105,6 @@ const AdminProductsType = () => {
             method: 'post',
             url: baseURL,
             data: JSON.stringify(addCategoria),
-            headers: {
-                'content-type': 'application/vnd.myapp.type+json'
-            }
         })
             .then(function (response) {
                 console.log(response);
