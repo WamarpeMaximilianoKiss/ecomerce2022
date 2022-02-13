@@ -99,12 +99,13 @@ const AdminProductsType = () => {
 
     const agregarNuevaCategoria = () => {
         handleClose()
+        const headers = {
+            "Content-Type": "application/json",
+        };
         const addCategoria = { "nombre": "jj" }
         console.log(JSON.stringify(addCategoria))
-        axios({
-            method: 'post',
-            url: baseURL,
-            data: JSON.stringify(addCategoria),
+        axios.post(baseURL, {
+            nombre: 'Fred',
         })
             .then(function (response) {
                 console.log(response);
@@ -112,6 +113,18 @@ const AdminProductsType = () => {
             .catch(function (error) {
                 console.log(error);
             });
+        // axios({
+        //     method: 'POST',
+        //     url: baseURL,
+        //     headers: { headers },
+        //     data: JSON.stringify(addCategoria),
+        // })
+        //     .then(function (response) {
+        //         console.log(response);
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
     }
 
     return (
