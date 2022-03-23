@@ -72,7 +72,7 @@ function LinkTab(props) {
 
 
 
-const AdminDashoard = () => {
+const AdminDashoard = (props) => {
     const [{ userType }, dispatch] = useStateValue();
     const navigate = useNavigate();
 
@@ -102,10 +102,10 @@ const AdminDashoard = () => {
                 Pedidos
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <AdminProductsType />
+                <AdminProductsType baseURL={props.baseURL} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <AdminProducts />
+                <AdminProducts baseURL={props.baseURL} />
             </TabPanel>
         </div>
     );

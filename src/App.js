@@ -15,6 +15,11 @@ import Home from './components/Home';
 import Categories from './components/Categories';
 
 function App() {
+  const baseURLTest = "http://localhost:9000/api/";
+  const baseURLProd = "http://localhost:9000/api/";
+  const baseURL = baseURLTest;
+
+
   const [{ user }, dispatch] = useStateValue();
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
@@ -34,13 +39,13 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
-          <Route path="/checkout-page" element={<CheckoutPage />} />
-          <Route path="/signin" element={<SignIn user={user} />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/admindashboard" element={<AdminDashoard />} />
+          <Route path="/checkout-page" element={<CheckoutPage baseURL={baseURL} />} />
+          <Route path="/signin" element={<SignIn user={user} baseURL={baseURL} />} />
+          <Route path="/signup" element={<SignUp baseURL={baseURL} />} />
+          <Route path="/checkout" element={<Checkout baseURL={baseURL} />} />
+          <Route path="/admindashboard" element={<AdminDashoard baseURL={baseURL} />} />
 
-          <Route path="/" element={<div><Categories /><Home /></div>} />
+          <Route path="/" element={<div><Categories baseURL={baseURL} /><Home /></div>} />
         </Routes>
         <Footer />
       </div>

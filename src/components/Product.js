@@ -15,8 +15,17 @@ import { AddShoppingCart } from '@material-ui/icons';
 import accounting from 'accounting';
 import { actionType } from '../reducer';
 import { useStateValue } from '../StateProvider';
+import Carousel from './Carousel';
+import { Button } from '@material-ui/core';
+import Slider from "react-slick";
 
-
+var settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1
+};
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -37,16 +46,32 @@ const useStyles = makeStyles((theme) => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)',
+  },
+  circulos: {
+    padding: 5,
+    margin: 5,
+    display: "inline-block",
+    // position:'absolute',
+    backgroundColor: "red",
+    borderRadius: "50%",
+    width: 10,
+    height: 10,
+    left: 0,
+    top: 0,
+    boxShadow: "2px 1px 2px 1px rgba(0, 0, 0, 0.6)"
+  },
+  imagenes: {
+    display: "flex"
   }
 }));
 
+
 export default function Product({
-  product: { id, nombre, descripcion, importe_venta, categoria }
+  product: { id, nombre, descripcion, importe_venta, categoria, colores, imagenes }
 }) {
   const classes = useStyles();
   const [{ basket }, dispatch] = useStateValue();
   const [expanded, setExpanded] = useState(false);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -60,20 +85,20 @@ export default function Product({
         descripcion,
         importe_venta,
         categoria,
+        colores,
+        imagenes
       }
     })
   }
 
   return (
     <div>
-
       <Card className={classes.root}>
         <CardHeader
           action={
             <Typography
               className={classes.action}
               color='textSecondary'
-
             >
               {accounting.formatMoney(importe_venta)}
             </Typography>
@@ -81,30 +106,37 @@ export default function Product({
           title={nombre}
           subheader="en stock"
         />
-        <CardMedia
-          className={classes.media}
-          image="https://rockcontent.com/es/wp-content/uploads/sites/3/2019/02/o-que-e-produto-no-mix-de-marketing-1024x538.png"
-          title={nombre}
-        />
+        <Carousel imagenes={imagenes} dots={true} infinite={true} speed={100} slidesToShow={1} slidesToScroll={1} >
+
+        </Carousel>
+        <br></br>
         <CardContent >
           <Typography variant="body2" color="textSecondary" component="p">
             {categoria}
           </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            Colores:
+          </Typography>
+          {
+            colores?.map((color) => (
+              <div className={classes.circulos} style={{ backgroundColor: color.codigo }}></div>
+            ))
+          }
+
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="agregar al carrito" onClick={addToBasket}>
-            <AddShoppingCart fontSize='large' ></AddShoppingCart>
-          </IconButton>
-          {Array(5).fill().map((_, i) => (
-            <p key={i}>&#11088;</p>
-          ))}
+
+          <Button color="primary" variant="contained" startIcon={<AddShoppingCart />}>
+            Agregar al carrito
+          </Button>
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,
             })}
             onClick={handleExpandClick}
             aria-expanded={expanded}
-            aria-label="show more"
+            aria-label="Mostrar más"
+
           >
             <ExpandMoreIcon />
           </IconButton>

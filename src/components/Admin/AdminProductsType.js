@@ -1,19 +1,16 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import { Button, IconButton } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MaterialTable from 'material-table'
 import Swal from "sweetalert2"
 import axios from "axios";
 
-const baseURL = "https://apiplayabrava.herokuapp.com/api/categorias/categorias";
-const baseURLTest = "localhost:9000/api/categorias/categorias";
+
 
 const columns = [
     {
@@ -39,9 +36,7 @@ const columns = [
     },
 ];
 
-const editarProducto = (data) => {
-    alert("editar " + data.nombre)
-}
+
 
 const eliminarProducto = (data) => {
     alert("eliminar " + data.nombre)
@@ -81,13 +76,56 @@ const useStyles = makeStyles({
     },
 });
 
-const AdminProductsType = () => {
 
+
+const AdminProductsType = (props) => {
+
+    const baseURL = props.baseURL;
     const classes = useStyles();
     const [categorias, setCategorias] = React.useState(null);
     const rows = [];
     const [open, setOpen] = React.useState(false);
     const [nuevaCategoria, setNuevaCategoria] = React.useState(null)
+    const [categoriaSeleccionada, setCategoriaSeleccionada] = React.useState(null)
+    const [categoriaSeleccionadaId, setCategoriaSeleccionadaId] = React.useState(null)
+    const [openSignup, setOpenSignup] = React.useState(false);
+
+    const editarProducto = (data) => {
+        setCategoriaSeleccionada(data.nombre)
+        setCategoriaSeleccionadaId(data.id)
+        console.log(data)
+        setOpenSignup(true)
+
+    }
+    const SignupModal = (props2) => {
+        return (
+            <div>
+                <Dialog
+                    open={props2.open}
+                    onClose={props2.handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title" className={classes.title}>
+                        Editar categoria
+                    </DialogTitle>
+                    <DialogContent className={classes.content}>
+                        <div className={classes.text}>
+                            <TextField id="standard-basic" label="nombre" fullWidth value={categoriaSeleccionada} />
+                        </div>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={props2.handleClose} className={classes.signUpButton}>
+                            Cancelar
+                        </Button>
+                        <Button onClick={props2.handleClose} className={classes.signUpButton}>
+                            Confirmar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        );
+    };
 
     const handleOpen = () => {
         setOpen(true);
@@ -101,34 +139,47 @@ const AdminProductsType = () => {
         handleClose()
         const headers = {
             "Content-Type": "application/json",
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
         };
-        const addCategoria = { "nombre": "jj" }
-        console.log(JSON.stringify(addCategoria))
-        axios.post(baseURL, {
-            nombre: 'Fred',
-        })
+
+        var data = JSON.stringify({
+            "nombre": nuevaCategoria
+        });
+
+        var config = {
+            method: 'post',
+            url: "http://localhost:9000/api/categorias/categorias",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios(config)
             .then(function (response) {
-                console.log(response);
+                console.log(JSON.stringify(response.data));
+                var respuesta = JSON.stringify(response.data)
+                if (respuesta.includes('correctamente')) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: respuesta,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
             })
             .catch(function (error) {
                 console.log(error);
             });
-        // axios({
-        //     method: 'POST',
-        //     url: baseURL,
-        //     headers: { headers },
-        //     data: JSON.stringify(addCategoria),
-        // })
-        //     .then(function (response) {
-        //         console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
+
     }
 
     return (
         <div>
+
+            <SignupModal open={openSignup} handleClose={() => setOpenSignup(false)} />
+
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Agregar nueva categoria</DialogTitle>
                 <DialogContent>
@@ -156,7 +207,7 @@ const AdminProductsType = () => {
             <MaterialTable columns={columns}
                 data={query =>
                     new Promise((resolve, reject) => {
-                        fetch(baseURL)
+                        fetch("http://localhost:9000/api/categorias/categorias")
                             .then(response => response.json())
                             .then(result => {
                                 console.log("Resultadito: ", result)

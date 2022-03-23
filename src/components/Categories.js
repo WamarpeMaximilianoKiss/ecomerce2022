@@ -8,8 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import axios from "axios";
 import Products from './Products';
+import Banner from './Banner';
+import { Grid } from '@material-ui/core';
 
-const baseURL = "https://apiplayabrava.herokuapp.com/api/categorias/categorias";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -55,15 +56,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Categories() {
+export default function Categories(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const [categorias, setCategorias] = React.useState(null);
+    const [banners, setBanners] = React.useState(null);
 
 
     React.useEffect(() => {
-        axios.get(baseURL).then((response) => {
+        axios.get(props.baseURL + "categorias/categorias").then((response) => {
             setCategorias(response.data);
+        });
+        axios.get(props.baseURL + "banners").then((response) => {
+            setBanners(response.data);
         });
     }, []);
 
@@ -95,11 +100,24 @@ export default function Categories() {
             {
                 categorias?.map((item, i) => (
                     <TabPanel value={value} index={i}>
-                        <Products id_cate={item.Id} />
+                        <Grid container spacing={3}>
+                            {
+                                banners?.map((item, i) => (
+                                    <Grid key={item.id} item xs={12} sm={12} md={12} lg={12}>
+                                        <div>
+                                            <Banner id_banner={item.id} titulo={item.titulo} imagenes={item.imagenes} />
+                                        </div>
+                                    </Grid>
+                                ))
+                            }
+                        </Grid>
+
+                        <Products id_cate={item.Id} baseURL={props.baseURL} />
                     </TabPanel>
                 ))
             }
 
-        </div>
+
+        </div >
     );
 }

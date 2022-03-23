@@ -4,15 +4,14 @@ import Grid from '@material-ui/core/Grid';
 import Product from './Product';
 import axios from "axios";
 
-
-const baseURL = "https://apiplayabrava.herokuapp.com/api/productos/productos/cat/";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing(2),
     backgroundColor: "whitesmoke",
   },
+
+
 
 }));
 
@@ -22,8 +21,9 @@ export default function Products(props) {
 
 
   React.useEffect(() => {
-    axios.get(baseURL + props.id_cate).then((response) => {
+    axios.get(props.baseURL + "productos/productos/cat/" + props.id_cate).then((response) => {
       setProducts(response.data);
+      console.log(response.data);
     });
   }, []);
 
