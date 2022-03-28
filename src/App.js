@@ -16,8 +16,8 @@ import Categories from './components/Categories';
 
 function App() {
   const baseURLTest = "http://localhost:9000/api/";
-  const baseURLProd = "http://localhost:9000/api/";
-  const baseURL = baseURLTest;
+  const baseURLProd = "https://apiplayabrava.herokuapp.com/api/";
+  const baseURL = baseURLProd;
 
 
   const [{ user }, dispatch] = useStateValue();
