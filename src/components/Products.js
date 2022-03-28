@@ -23,7 +23,6 @@ export default function Products(props) {
   React.useEffect(() => {
     axios.get(props.baseURL + "productos/productos/cat/" + props.id_cate).then((response) => {
       setProducts(response.data);
-      console.log(response.data);
     });
   }, []);
 
@@ -32,8 +31,8 @@ export default function Products(props) {
       <Grid container spacing={3}>
         {
           products?.map((product) => (
-            <Grid key={product.id} item xs={12} sm={6} md={4} lg={3}>
-              <Product key={product.id} product={product} />
+            <Grid key={product.Id} item xs={12} sm={6} md={4} lg={3}>
+              <Product key={product.Id} product={product} />
             </Grid>
           ))
         }

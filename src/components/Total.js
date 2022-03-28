@@ -28,10 +28,12 @@ const Total = () => {
     const toCheckOut = () => {
         navigate('/checkout')
     }
-
+    const sum = basket.reduce(function (prev, current) {
+        return prev + current.cantidad
+    }, 0);
     return (
         <div className={classes.root} >
-            <h5>Total items: {basket?.length}</h5>
+            <h5>Total items: {sum}</h5>
             <h5>{accounting.formatMoney(getBasketTotal(basket), "$")}</h5>
             <Button className={classes.button} variant="contained" color="secondary" onClick={toCheckOut} >Check out</Button>
 

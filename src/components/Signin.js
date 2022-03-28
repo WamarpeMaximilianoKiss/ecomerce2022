@@ -58,11 +58,7 @@ export default function SignIn(user) {
     e.preventDefault();
 
     auth.signInWithEmailAndPassword(email, password).then((auth) => {
-      console.log(auth);
-      console.log("holaa");
-
       if (auth) {
-        debugger
         if (email === "franco@franco.com") {
 
           navigate('/admindashboard')

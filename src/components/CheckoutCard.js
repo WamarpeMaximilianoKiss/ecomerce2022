@@ -1,86 +1,198 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
-import DeleteIcon from '@material-ui/icons/Delete';
-import accounting from 'accounting'
-import { IconButton } from '@material-ui/core';
 import { useStateValue } from '../StateProvider';
 import { actionType } from '../reducer';
+import CardContent from '@material-ui/core/CardContent';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+import Box from '@material-ui/core/Box';
+import { Button, Grid, ListItemIcon, ListItemText, MenuItem, Select, TextField } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
-  },
-  action: {
-      marginTop: "1rem",
+    display: "flex",
+    maxHeight: 120,
+    minHeight: 120,
+    minWidth: 300,
+    backgroundColor: "whitesmoke",
+
   },
   media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
+    display: "flex",
+    maxWidth: 100,
+    minWidth: 100,
+    minHeight: 120,
+    maxHeight: 120,
   },
-  cardActions: {
-      display: "flex",
-      justifyContent: "space-between",
-      textAlign: "center"
+  container: {
+    display: "flex",
+    marginTop: "30px",
   },
-  cardRating: {
-      display: "flex"
-  }
+  cantidad: {
+    display: "flex",
+  },
+  btnCantidades: {
+    display: "flex",
+    maxWidth: '30px',
+    maxHeight: '30px',
+    minWidth: '30px',
+    minHeight: '30px',
+
+  },
+  cantidades: {
+    display: "flex",
+
+  },
+  gridItem: {
+    display: "flex",
+    minHeight: 100,
+    maxHeight: 100,
+  },
+
+  lblCantidad: {
+    marginInline: 20,
+    marginTop: -20,
+    alignItems: "center",
+    textAlign: "center",
+
+  },
+  Opcion: {
+    backgroundColor: "red",
+
+  },
+  circulos: {
+    padding: 5,
+    margin: 5,
+    display: "inline-block",
+    // position:'absolute',
+    borderRadius: "50%",
+    width: 5,
+    height: 5,
+    left: 0,
+    top: 0,
+    boxShadow: "2px 1px 2px 1px rgba(0, 0, 0, 0.6)"
+  },
 }));
 
+
+
 export default function CheckoutCard({
-    product : {id,name,productType,image,price,rating,description}
-  }) {
+  product: { Id, nombre, descripcion, importe_venta, categoria, colores, imagenes, cantidad }
+}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  const [{basket}, dispatch] = useStateValue();
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const [{ basket }, dispatch] = useStateValue();
+  const theme = useTheme();
+  const [selectedColor, setSelectedColor] = React.useState()
 
   const removeItem = () => dispatch({
     type: actionType.REMOVE_ITEM,
-    id: id
+    id: Id
   })
 
+
+  const handleSelect = (event) => {
+    setSelectedColor(event.target.value);
+    console.log(event.target); //
+  }
+  const addToBasket = () => {
+    dispatch({
+      type: actionType.ADD_TO_BASKET,
+      item: {
+        Id: Id,
+        nombre,
+        descripcion,
+        importe_venta,
+        categoria,
+        colores,
+        imagenes,
+        cantidad: 1
+      }
+    });
+
+  }
+
+
   return (
-    <Card key={id} className={classes.root}>
-      <CardHeader
-        action={
-            <Typography
-                className={classes.action}
-                variant = 'h5'
-                color = 'textSecondary'
-            >
-            {accounting.formatMoney(price)}
-            </Typography>
-        }
-        title={name}
-        subheader="en stock"
-      />
-      <CardMedia
-        className={classes.media}
-        image={image}
-        title={name}
-      />
+    <div>
+      <Grid container spacing={3} className={classes.cantidades}>
+        <Card>
+          <div
+            className={classes.root}
+          >
+            <Grid key={nombre} item xs={2} sm={2} md={2} lg={2} className={classes.gridItem}>
+              <Box className={classes.root}
+              >
+                <CardMedia
+                  component="img"
+                  image={imagenes[0].link_imagen}
+                  alt={descripcion}
+                  className={classes.media}
+                >
+                </CardMedia>
+              </Box>
+            </Grid>
+            <Grid key={Id} item xs={7} sm={7} md={7} lg={7} className={classes.gridItem}>
+              <Box className={classes.root}>
+                <CardContent>
+                  <Typography component="div" variant="h6">
+                    {nombre}
+                  </Typography>
+                  <Typography variant="subtitle1" color="text.secondary" component="div">
+                    {descripcion}
+                  </Typography>
+                  Color:
+                  <Select label="color" onChange={handleSelect} >
 
-      <CardActions disableSpacing className={classes.cardActions}>
-        <div className={classes.cardRating}>
-            {Array(rating).fill().map((_,i) => (
-                <p key={i}>&#11088;</p>
-            ))}
-        </div>
-        <IconButton onClick={removeItem} >
-        <DeleteIcon fontSize='large' />
+                    <MenuItem value="">
+                      <ListItemIcon>
+                        <RemoveIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Color" />
+                    </MenuItem>
+                    {
+                      colores?.map((color) => (
+                        <MenuItem value={color.id_color}>
 
-        </IconButton>
-      </CardActions>
+                          <option className={classes.circulos} style={{ backgroundColor: color.color_hex }} value={color.id_color} id={color.id_color}> </option>
+                        </MenuItem>
+                      ))
+                    }
 
-    </Card>
+                  </Select>
+                </CardContent>
+              </Box>
+            </Grid>
+            <Grid key={nombre} item xs={3} sm={3} md={3} lg={3} className={classes.gridItem}>
+              <Box className={classes.container}>
+                <div className={classes.cantidades}>
+                  <Button id={Id} variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={removeItem}>
+                    <RemoveIcon />
+                  </Button>
+                  <Typography component="div" variant="h2" className={classes.lblCantidad} id={Id} >
+                    {cantidad}
+                  </Typography>
+                  <Button id={Id} variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={addToBasket}>
+                    <AddIcon />
+                  </Button>
+
+
+                </div>
+              </Box>
+            </Grid>
+          </div>
+        </Card>
+      </Grid>
+
+
+    </div >
+
   );
 }

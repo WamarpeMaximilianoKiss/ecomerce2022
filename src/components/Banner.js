@@ -39,8 +39,6 @@ export default function Banner(props) {
     const imagenes = props.imagenes;
     const classes = useStyles();
     const theme = useTheme();
-
-    console.log(props);
     return (
         <div>
             <Card className={classes.root}>
@@ -59,9 +57,12 @@ export default function Banner(props) {
                     imagenes={imagenes}
                     dots={true}
                     infinite={true}
-                    speed={100}
+                    speed={1500}
                     slidesToShow={1}
                     slidesToScroll={1}
+                    autoplay={true}
+                    width="100%"
+                    height={350}
                 />
             </Card>
 

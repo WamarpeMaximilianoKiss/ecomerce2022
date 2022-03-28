@@ -4,7 +4,8 @@ export const initialState = {
     userType: null,
     shippingData: {},
     categories: [],
-    products: []
+    products: [],
+    importeTotal: 0,
 }
 
 export const actionType = {
@@ -19,30 +20,79 @@ export const actionType = {
 }
 
 export const getBasketTotal = (basket) => {
-    console.log(basket);
-    return basket?.reduce((amount, item) => item.price + amount, 0)
+    return basket?.reduce((amount, item) => (item.importe_venta * item.cantidad) + amount, 0);
 }
 
 const reducer = (state, action) => {
-    console.log(action);
     switch (action.type) {
         case "ADD_TO_BASKET":
-            return {
-                ...state,
-                basket: [...state.basket, action.item],
-            };
+            //comprueba si ya existe
+            var actual = state;
+            var nuevo = action.item;
+
+            if (actual != null) {
+
+                if (state.basket.length > 0) {
+
+                    var cant = 0;
+                    for (let index = 0; index < state.basket.length; index++) {
+                        const element = state.basket[index];
+                        if (element.Id === action.item.Id) {
+                            element.cantidad++;
+                            cant++;
+                        }
+
+                    }
+                    if (cant == 0) {
+                        return {
+                            ...state,
+                            basket: [...state.basket, action.item],
+                        };
+                    }
+                    else {
+
+                        return {
+                            ...state,
+                            basket: [...state.basket],
+                        };
+                    }
+
+                }
+                else {
+
+                    return {
+                        ...state,
+                        basket: [...state.basket, action.item],
+                    };
+                }
+
+            }
+
         case "REMOVE_ITEM":
             const index = state.basket.findIndex(basketItem => basketItem.id === action.id);
             let newBasket = [...state.basket];
+
+            state.basket?.map((pro) => {
+                if (pro.Id === action.id) {
+                    if (pro.cantidad === 1) {
+                        newBasket.splice(index, 1);
+                    }
+                    else {
+                        pro.cantidad--;
+                    }
+                }
+            });
             if (index >= 0) {
                 newBasket.splice(index, 1);
             } else {
                 console.log("No se puede eliminar el producto")
             }
+
             return {
                 ...state,
                 basket: newBasket,
             };
+
         case "SET_USER":
             return {
                 ...state,

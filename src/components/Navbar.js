@@ -1,12 +1,12 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import logo from '../assets/logo.png';
 import { Button, Badge, Hidden, ListItemIcon, Divider } from '@material-ui/core';
-import { Person, PersonAdd, ShoppingCart } from '@material-ui/icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { ExitToApp, Person, PersonAdd, ShoppingCart } from '@material-ui/icons';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useStateValue } from '../StateProvider';
 import { auth } from '../firebase';
 import { actionType } from '../reducer';
@@ -15,11 +15,15 @@ import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import MenuItem from '@material-ui/core/MenuItem';
-import Popper from '@material-ui/core/Popper';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import MenuList from '@material-ui/core/MenuList';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Menu from '@material-ui/core/Menu';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import SendIcon from '@material-ui/icons/Send';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,11 +36,6 @@ const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
-  // button: {
-  //   marginLeft: theme.spacing(2),
-  //   display: "flex",
-  //   justifyContent: "center",
-  // },
   image: {
     marginRight: "10px",
   },
@@ -46,17 +45,47 @@ const useStyles = makeStyles((theme) => ({
   textoLogo: {
     color: "black",
   },
-  cuenta: {
-    flex: "40px",
-    height: "60px",
+  links: {
+    textDecoration: "none",
+    color: "black",
+    display: "block"
   },
-  itemmenucuenta: {
-    minWidth: "180",
-    backgroundColor: "red",
-  },
-
+  button: {
+    marginTop: "10px",
+  }
 }));
 
+
+const StyledMenuItem = withStyles((theme) => ({
+  root: {
+    '&:focus': {
+      backgroundColor: theme.palette.primary.main,
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+}))(MenuItem);
+
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
 
 
 export default function Navbar() {
@@ -64,7 +93,6 @@ export default function Navbar() {
   const [{ basket, user }, dispatch] = useStateValue();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
 
   const handAuth = () => {
     if (user) {
@@ -85,11 +113,17 @@ export default function Navbar() {
 
   }
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (event) => {
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const Abrir = (event) => {
     if (event.target.id == "salir") {
       setOpen(false);
       handAuth();
@@ -101,30 +135,8 @@ export default function Navbar() {
     else if (event.target.id == "login") {
       navigate('/signin')
     }
-    else {
-      if (anchorRef.current && anchorRef.current.contains(event.target)) {
-        return;
-      }
-    }
-    setOpen(false);
+
   };
-
-  function handleListKeyDown(event) {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    }
-  }
-
-  // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
-    prevOpen.current = open;
-  }, [open]);
-
 
   return (
     <div className={classes.root}>
@@ -150,54 +162,64 @@ export default function Navbar() {
             <div className={classes.grow} />
 
 
-            <div className='button' style={{ display: 'inline-flex' }}>
+            <div className='button'>
               <div className='containerUserChart'>
 
                 {user ? <div >
                   <Button
-                    variant="outlined"
-                    ref={anchorRef}
-                    aria-controls={open ? 'menu-list-grow' : undefined}
+                    aria-controls="customized-menu"
                     aria-haspopup="true"
-                    onClick={handleToggle}
-                    className={classes.cuenta}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleClick}
+                    className={classes.button}
 
                   >
-                    <Person />
                     {user.email}
                   </Button>
-                  <Popper className={classes.itemmenucuenta} open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-                    {({ TransitionProps, placement }) => (
-                      <Grow
-                        {...TransitionProps}
-                        style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                      >
+                  <StyledMenu
+                    id="customized-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <Link className={classes.links} to="/signin" >
 
-                        <Paper style={{ width: '180px' }} >
-                          <div className={classes.itemmenucuenta}>
-                            <ClickAwayListener onClickAway={handleClose}>
-                              <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                                <MenuItem id="perfil" key={1} onClick={handleClose}>Perfil</MenuItem>
-                                <MenuItem id="cuenta" key={2} onClick={handleClose}>Mi cuenta</MenuItem>
-                                <Divider />
-                                <MenuItem id="salir" key={3} onClick={handleClose}>Salir</MenuItem>
-                              </MenuList>
-                            </ClickAwayListener>
-                          </div>
-                        </Paper>
-                      </Grow>
-                    )}
-                  </Popper>
+                      <StyledMenuItem>
+                        <ListItemIcon>
+                          <AccountCircleIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Mi cuenta" />
+                      </StyledMenuItem>
+                    </Link>
+                    <Link className={classes.links} to="/checkout-page" >
+                      <StyledMenuItem>
+                        <ListItemIcon>
+                          <ShoppingBasketIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Carrito" />
+                      </StyledMenuItem>
+                    </Link>
+                    <Link className={classes.links} to="/signin" >
+                      <StyledMenuItem >
+                        <ListItemIcon>
+                          <ExitToAppIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText id="salir" onClick={Abrir} primary="Salir" />
+                      </StyledMenuItem>
+                    </Link>
+                  </StyledMenu>
+
                 </div>
                   :
                   <div >
                     <Button
                       variant="outlined"
-                      ref={anchorRef}
                       aria-controls={open ? 'menu-list-grow' : undefined}
                       aria-haspopup="true"
                       onClick={handleClose}
-                      className={classes.cuenta}
+                      className={classes.button}
                       id="login"
                     >
                       Iniciar sesión

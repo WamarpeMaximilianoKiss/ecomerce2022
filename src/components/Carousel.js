@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from "react-slick";
-
+import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 
 export default function Carousel(props) {
 
@@ -9,8 +10,11 @@ export default function Carousel(props) {
         infinite: props.infinite,
         speed: props.speed,
         slidesToShow: props.slidesToScroll,
-        slidesToScroll: props.slidesToScroll
+        slidesToScroll: props.slidesToScroll,
+        autoplay: props.autoplay,
     };
+
+
 
     return (
         <div>
@@ -18,7 +22,7 @@ export default function Carousel(props) {
                 {
                     props.imagenes?.map(imagen => (
                         <div>
-                            <img src={imagen.link_imagen} width="100%"></img>
+                            <img src={imagen.link_imagen} width={props.width} height={props.height}></img>
                         </div>
                     ))
                 }

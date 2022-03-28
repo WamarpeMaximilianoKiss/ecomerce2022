@@ -107,18 +107,18 @@ const AdminProducts = (props) => {
 
     //inputs form
     const [nombre, setNombre] = React.useState(null);
-    const onNombreChanges = (e) => setNombre(e.target.value); console.log("Nombre: ", nombre)
+    const onNombreChanges = (e) => setNombre(e.target.value);
     const [descripcion, setDescripcion] = React.useState(null);
-    const onDescripcionChanges = (e) => setDescripcion(e.target.value); console.log("Descripcin: ", descripcion)
+    const onDescripcionChanges = (e) => setDescripcion(e.target.value);
     const [categoriaSel, setCategoriasSel] = React.useState(null);
     const [peso, setPeso] = React.useState(null);
-    const onPesoChanges = (e) => setPeso(e.target.value); console.log("Peso: ", peso)
+    const onPesoChanges = (e) => setPeso(e.target.value);
     const [importeCosto, setImporteCosto] = React.useState(null);
-    const onImporteCChanges = (e) => setImporteCosto(e.target.value); console.log("Importe costo: ", importeCosto)
+    const onImporteCChanges = (e) => setImporteCosto(e.target.value);
     const [importeVenta, setImporteVenta] = React.useState(null);
-    const onImporteVChanges = (e) => setImporteVenta(e.target.value); console.log("Importe venta: ", importeVenta)
+    const onImporteVChanges = (e) => setImporteVenta(e.target.value);
     const [stock, setStock] = React.useState(null);
-    const onStockChanges = (e) => setStock(e.target.value); console.log("Importe venta: ", importeVenta)
+    const onStockChanges = (e) => setStock(e.target.value);
 
     const [checked, setChecked] = React.useState([0]);
 
@@ -133,7 +133,6 @@ const AdminProducts = (props) => {
         }
 
         setChecked(newChecked);
-        console.log(newChecked);
     };
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
@@ -298,7 +297,6 @@ const AdminProducts = (props) => {
                         fetch(props.baseURL + "productos/productos")
                             .then(response => response.json())
                             .then(result => {
-                                console.log("Resultadito: ", result)
                                 resolve({
                                     data: result
                                 })

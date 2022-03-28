@@ -52,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
     margin: 5,
     display: "inline-block",
     // position:'absolute',
-    backgroundColor: "red",
     borderRadius: "50%",
     width: 10,
     height: 10,
@@ -62,12 +61,13 @@ const useStyles = makeStyles((theme) => ({
   },
   imagenes: {
     display: "flex"
-  }
+  },
+
 }));
 
 
 export default function Product({
-  product: { id, nombre, descripcion, importe_venta, categoria, colores, imagenes }
+  product: { Id, nombre, descripcion, importe_venta, categoria, colores, imagenes }
 }) {
   const classes = useStyles();
   const [{ basket }, dispatch] = useStateValue();
@@ -80,13 +80,14 @@ export default function Product({
     dispatch({
       type: actionType.ADD_TO_BASKET,
       item: {
-        id,
+        Id: Id,
         nombre,
         descripcion,
         importe_venta,
         categoria,
         colores,
-        imagenes
+        imagenes,
+        cantidad: 1
       }
     })
   }
@@ -105,8 +106,12 @@ export default function Product({
           }
           title={nombre}
           subheader="en stock"
-        />
-        <Carousel imagenes={imagenes} dots={true} infinite={true} speed={100} slidesToShow={1} slidesToScroll={1} >
+          titleTypographyProps={{ variant: 'caption' }}
+
+        >
+
+        </CardHeader>
+        <Carousel imagenes={imagenes} dots={true} infinite={true} speed={100} slidesToShow={1} slidesToScroll={1} autoplay={false} width={300} height={200}>
 
         </Carousel>
         <br></br>
@@ -119,14 +124,14 @@ export default function Product({
           </Typography>
           {
             colores?.map((color) => (
-              <div className={classes.circulos} style={{ backgroundColor: color.codigo }}></div>
+              <div className={classes.circulos} style={{ backgroundColor: color.color_hex }}></div>
             ))
           }
 
         </CardContent>
         <CardActions disableSpacing>
 
-          <Button color="primary" variant="contained" startIcon={<AddShoppingCart />}>
+          <Button onClick={addToBasket} color="primary" variant="contained" startIcon={<AddShoppingCart />}>
             Agregar al carrito
           </Button>
           <IconButton

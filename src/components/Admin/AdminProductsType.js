@@ -93,7 +93,6 @@ const AdminProductsType = (props) => {
     const editarProducto = (data) => {
         setCategoriaSeleccionada(data.nombre)
         setCategoriaSeleccionadaId(data.id)
-        console.log(data)
         setOpenSignup(true)
 
     }
@@ -158,7 +157,6 @@ const AdminProductsType = (props) => {
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
                 var respuesta = JSON.stringify(response.data)
                 if (respuesta.includes('correctamente')) {
                     Swal.fire({
@@ -210,7 +208,6 @@ const AdminProductsType = (props) => {
                         fetch("http://localhost:9000/api/categorias/categorias")
                             .then(response => response.json())
                             .then(result => {
-                                console.log("Resultadito: ", result)
                                 resolve({
                                     data: result,
                                     page: 0,
