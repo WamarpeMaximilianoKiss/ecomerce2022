@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStateValue } from '../StateProvider';
 import Grid from '@material-ui/core/Grid';
-import { Button, Chip, Container, Divider, ImageList, ImageListItem } from '@material-ui/core';
+import { Avatar, Button, Chip, Container, Divider, ImageList, ImageListItem } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -22,6 +22,8 @@ import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import { green } from '@material-ui/core/colors';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import DoneIcon from '@material-ui/icons/Done';
+
 import { actionType } from '../reducer';
 
 
@@ -214,8 +216,10 @@ export default function ProductDetail() {
                                     Envio a sucursal: $360
                                 </Typography>
                                 <Typography variant='h6'>
-                                    Llevando 20 unidades
-                                    <LocalShippingIcon fontSize='large' style={{ color: green[500] }}></LocalShippingIcon>
+                                    <Chip
+                                        deleteIcon={<DoneIcon />}
+                                        label=" Llevando 20 unidades envio gratis!" variant="outlined" />
+
                                 </Typography>
                                 <div className={classes.cantidades}>
 
