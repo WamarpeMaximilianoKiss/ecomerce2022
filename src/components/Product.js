@@ -16,8 +16,10 @@ import accounting from 'accounting';
 import { actionType } from '../reducer';
 import { useStateValue } from '../StateProvider';
 import Carousel from './Carousel';
-import { Button } from '@material-ui/core';
+import { Button, Chip, Hidden } from '@material-ui/core';
 import Slider from "react-slick";
+import Divider from '@material-ui/core/Divider';
+import { useNavigate } from 'react-router-dom';
 
 var settings = {
   dots: true,
@@ -29,6 +31,8 @@ var settings = {
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
+    minHeight: 400,
+    cursor: "pointer",
   },
   action: {
     marginTop: "1rem",
@@ -62,6 +66,23 @@ const useStyles = makeStyles((theme) => ({
   imagenes: {
     display: "flex"
   },
+  importe: {
+    marginLeft: "15px",
+  },
+  colores: {
+    marginLeft: "5px",
+    marginTop: "0px",
+    minHeight: "35px",
+  },
+  nombreProducto: {
+    marginLeft: "15px",
+    subtitle1: {
+      fontSize: 12,
+    },
+    acciones: {
+      marginButton: "2px"
+    }
+  }
 
 }));
 
@@ -70,11 +91,36 @@ export default function Product({
   product: { Id, nombre, descripcion, importe_venta, categoria, colores, imagenes }
 }) {
   const classes = useStyles();
-  const [{ basket }, dispatch] = useStateValue();
+  const [{ basket, productDetail }, dispatch] = useStateValue();
   const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
+
+  const toCheckOut = () => {
+    navigate('/ProductDetail')
+  }
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const addToDetail = () => {
+    dispatch({
+      type: actionType.SET_PROD_DETAIL,
+      item: {
+        Id: Id,
+        nombre,
+        descripcion,
+        importe_venta,
+        categoria,
+        colores,
+        imagenes,
+        cantidad: 1
+      }
+    });
+    console.log("Detalle", productDetail);
+
+    navigate('/ProductDetail')
+
+  }
 
   const addToBasket = () => {
     dispatch({
@@ -94,46 +140,41 @@ export default function Product({
 
   return (
     <div>
-      <Card className={classes.root}>
-        <CardHeader
-          action={
-            <Typography
-              className={classes.action}
-              color='textSecondary'
-            >
-              {accounting.formatMoney(importe_venta)}
-            </Typography>
-          }
-          title={nombre}
-          subheader="en stock"
-          titleTypographyProps={{ variant: 'caption' }}
+      <Card className={classes.root} onClick={addToDetail}>
 
-        >
-
-        </CardHeader>
         <Carousel imagenes={imagenes} dots={true} infinite={true} speed={100} slidesToShow={1} slidesToScroll={1} autoplay={false} width={300} height={200}>
 
         </Carousel>
-        <br></br>
-        <CardContent >
-          <Typography variant="body2" color="textSecondary" component="p">
-            {categoria}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Colores:
-          </Typography>
+        <Divider />
+
+        <CardContent className={classes.colores}>
           {
+            colores?.length > 0 ? <Chip label={colores?.length + " colores"} variant="outlined" color="primary" />
+              :
+              <div></div>
+          }
+          {/* {
             colores?.map((color) => (
               <div className={classes.circulos} style={{ backgroundColor: color.color_hex }}></div>
             ))
-          }
-
+          } */}
         </CardContent>
-        <CardActions disableSpacing>
+        <Typography
+          className={classes.importe}
+          variant='h5'
+        >
+          {accounting.formatMoney(importe_venta)}
+        </Typography>
+        <Typography className={classes.nombreProducto} variant="body2" >
+          {nombre}
+        </Typography>
+
+        <CardActions disableSpacing className={classes.acciones}>
 
           <Button onClick={addToBasket} color="primary" variant="contained" startIcon={<AddShoppingCart />}>
             Agregar al carrito
           </Button>
+
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,

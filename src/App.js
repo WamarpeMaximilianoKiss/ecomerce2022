@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import AdminDashoard from './components/Admin/AdminDashoard';
 import Home from './components/Home';
 import Categories from './components/Categories';
+import ProductDetail from './components/ProductDetail';
 
 function App() {
   const baseURLTest = "http://localhost:9000/api/";
@@ -44,6 +45,7 @@ function App() {
           <Route path="/signup" element={<SignUp baseURL={baseURL} />} />
           <Route path="/checkout" element={<Checkout baseURL={baseURL} />} />
           <Route path="/admindashboard" element={<AdminDashoard baseURL={baseURL} />} />
+          <Route path="/ProductDetail" element={<ProductDetail baseURL={baseURL} />} />
 
           <Route path="/" element={<div><Categories baseURL={baseURL} /><Home /></div>} />
         </Routes>

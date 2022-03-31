@@ -6,6 +6,7 @@ export const initialState = {
     categories: [],
     products: [],
     importeTotal: 0,
+    productDetail: [],
 }
 
 export const actionType = {
@@ -17,6 +18,7 @@ export const actionType = {
     SET_SHIPPINGDATA: "SET_SHIPPINGDATA",
     SET_CATEGORIES: "SET_CATEGORIES",
     SET_PROD_CAT: "SET_PROD_CAT",
+    SET_PROD_DETAIL: "SET_PROD_DETAIL",
 }
 
 export const getBasketTotal = (basket) => {
@@ -122,6 +124,14 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 products: action.products
+            };
+        case "SET_PROD_DETAIL":
+            console.log("Estado: ", state);
+            console.log("Action: ", action);
+
+            return {
+                ...state,
+                productDetail: [action.item],
             };
         default:
             console.log("default!!");

@@ -10,6 +10,8 @@ import axios from "axios";
 import Products from './Products';
 import Banner from './Banner';
 import { Grid } from '@material-ui/core';
+import withWidth, { isWidthUp, isWidthDown } from "@material-ui/core/withWidth";
+import { useState, useEffect } from 'react';
 
 
 function TabPanel(props) {
@@ -53,14 +55,26 @@ const useStyles = makeStyles((theme) => ({
     },
     tab: {
         backgroundColor: "primary",
+        maxWidth: "100%",
+        alignItems: "center"
     }
 }));
 
 export default function Categories(props) {
     const classes = useStyles();
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
     const [value, setValue] = React.useState(0);
     const [categorias, setCategorias] = React.useState(null);
     const [banners, setBanners] = React.useState(null);
+
+
+    function getWindowDimensions() {
+        const { innerWidth: width, innerHeight: height } = window;
+        return {
+            width,
+            height
+        };
+    }
 
 
     React.useEffect(() => {
@@ -70,6 +84,12 @@ export default function Categories(props) {
         axios.get(props.baseURL + "banners").then((response) => {
             setBanners(response.data);
         });
+        function handleResize() {
+            setWindowDimensions(getWindowDimensions());
+        }
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     const handleChange = (event, newValue) => {
@@ -77,9 +97,16 @@ export default function Categories(props) {
     };
 
 
+    let condTabOrientation;
+    if (windowDimensions.width < 600) {
+        condTabOrientation = "vertical";
+    } else {
+        condTabOrientation = "horizontal";
+    }
+
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="default" className={classes.tab}>
+            <AppBar position="static" color="default">
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -88,10 +115,16 @@ export default function Categories(props) {
                     variant="scrollable"
                     scrollButtons="auto"
                     aria-label="scrollable auto tabs example"
+                    orientation={condTabOrientation}
+                    className={classes.tab}
                 >
                     {
                         categorias?.map((item, x) => (
-                            < Tab key={x} label={item.nombre} {...a11yProps(item.Id)} />
+
+                            x === 0 ?
+                                < Tab key={x} label={item.nombre} {...a11yProps(item.Id)} disableRipple width="100%" />
+                                :
+                                < Tab key={x} label={item.nombre} {...a11yProps(item.Id)} width="100%" />
                         ))
                     }
 
