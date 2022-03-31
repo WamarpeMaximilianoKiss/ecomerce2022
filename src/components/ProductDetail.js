@@ -1,9 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { actionType } from '../reducer';
 import { useStateValue } from '../StateProvider';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { Button, Chip, Container, Divider, ImageList, ImageListItem } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
@@ -12,30 +10,27 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import clsx from 'clsx';
-import Carousel from './Carousel';
 import accounting from 'accounting';
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import { green } from '@material-ui/core/colors';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import { actionType } from '../reducer';
 
-var settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1
-};
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         margin: 20,
+        backgroundColor: "whitesmoke",
+        borderRadius: 10
     },
     paper: {
         padding: theme.spacing(2),
@@ -57,9 +52,6 @@ const useStyles = makeStyles((theme) => ({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
-    avatar: {
-        backgroundColor: red[500],
-    },
     thumbnail: {
         alignItems: "center",
         textAlign: "center",
@@ -67,16 +59,16 @@ const useStyles = makeStyles((theme) => ({
     thumbnails: {
         alignItems: "center",
         textAlign: "center",
-
     },
     cartaEntera: {
         display: "flex",
+
     },
     imagen: {
         width: "100%",
         minHeight: 298,
         maxHeight: 380,
-
+        margin: 20,
 
     },
     imageList: {
@@ -89,7 +81,9 @@ const useStyles = makeStyles((theme) => ({
         transform: 'scale(0.8)',
     },
     title: {
-        fontSize: 14,
+        fontSize: 24,
+        color: "#eceff1",
+        textAlign: "left"
     },
     pos: {
         marginBottom: 12,
@@ -97,15 +91,45 @@ const useStyles = makeStyles((theme) => ({
     botones: {
         textAlign: "center",
     },
-
     boton: {
         width: 200,
         marginBlock: 10,
-
     },
     cartaPrecio: {
-        backgroundColor: "whitesmoke"
-    }
+        backgroundColor: "#eceff1",
+        alignItems: "center",
+        textAlign: "center",
+        margin: 20,
+        borderRadius: 10,
+        minWidth: 300,
+    },
+    cardheader: {
+        backgroundColor: "#455a64",
+        color: "#fff"
+
+    },
+    cantidades: {
+        display: "flex",
+        alignItems: "center",
+        marginLeft: 80,
+        marginRight: 70,
+
+    },
+    btnCantidades: {
+        display: "flex",
+        maxWidth: '30px',
+        maxHeight: '30px',
+        minWidth: '30px',
+        minHeight: '30px',
+
+    },
+    lblCantidad: {
+        marginInline: 20,
+        alignItems: "center",
+        textAlign: "center",
+
+    },
+
 }));
 
 
@@ -117,6 +141,28 @@ export default function ProductDetail() {
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+    const addToBasket = () => {
+        dispatch({
+            type: actionType.ADD_TO_BASKET,
+            item: {
+                Id: productDetail[0].Id,
+                nombre: productDetail[0].nombre,
+                descripcion: productDetail[0].descripcion,
+                importe_venta: productDetail[0].importe_venta,
+                categoria: productDetail[0].categoria,
+                colores: productDetail[0].colores,
+                imagenes: productDetail[0].imagenes,
+                cantidad: productDetail[0].cantidad,
+            }
+        });
+
+
+    }
+
+    const removeItem = () => dispatch({
+        type: actionType.REMOVE_ITEM,
+        id: productDetail[0].Id,
+    })
 
 
     return (
@@ -124,6 +170,7 @@ export default function ProductDetail() {
             <Container>
                 <Grid spacing={1} className={classes.cartaEntera} >
                     <Grid lg={2} >
+                        <br></br>
                         <ImageList rowHeight={120} className={classes.imageList} cols={1}>
                             {productDetail[0].imagenes.map((item, i) => (
                                 <ImageListItem key={i} cols={1}>
@@ -141,8 +188,8 @@ export default function ProductDetail() {
 
                     <Grid lg={4} className={classes.cartaEntera}  >
 
-                        <Card className={classes.root}>
-                            <CardContent className={classes.cartaPrecio} >
+                        <Card className={classes.cartaPrecio} >
+                            <CardContent className={classes.cardheader}  >
                                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                                     {productDetail[0].nombre}
                                 </Typography>
@@ -161,12 +208,28 @@ export default function ProductDetail() {
                             </CardContent>
                             <Divider></Divider>
                             <div className={classes.botones}>
-                                <Typography variant="body2" component="p">
+                                <Typography variant="h6" gutterBottom>
                                     Envio a domicilio: $560
                                     <br />
                                     Envio a sucursal: $360
-
                                 </Typography>
+                                <Typography variant='h6'>
+                                    Llevando 20 unidades
+                                    <LocalShippingIcon fontSize='large' style={{ color: green[500] }}></LocalShippingIcon>
+                                </Typography>
+                                <div className={classes.cantidades}>
+
+                                    <Button variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={removeItem}>
+                                        <RemoveIcon />
+                                    </Button>
+                                    <Typography component="div" variant="h2" className={classes.lblCantidad} >
+                                        {productDetail[0].cantidad}
+                                    </Typography>
+                                    <Button variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={addToBasket}>
+                                        <AddIcon />
+                                    </Button>
+
+                                </div>
                                 <Button className={classes.boton} variant="contained" color="primary">
                                     Comprar
                                 </Button>
@@ -190,6 +253,7 @@ export default function ProductDetail() {
                                     </IconButton>
                                 }
                                 title={productDetail[0].nombre}
+
                             />
                             <CardMedia>
                             </CardMedia>
