@@ -14,6 +14,8 @@ import Box from '@material-ui/core/Box';
 import { Button, Grid, ListItemIcon, ListItemText, MenuItem, Select, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,6 +99,11 @@ export default function CheckoutCard({
     id: Id
   })
 
+  const removeItemTotal = () => dispatch({
+    type: actionType.REMOVE_ITEM_TOTAL,
+    id: Id
+  })
+
 
   const handleSelect = (event) => {
     setSelectedColor(event.target.value);
@@ -169,9 +176,13 @@ export default function CheckoutCard({
                   </Select>
                 </CardContent>
               </Box>
+
             </Grid>
             <Grid key={nombre} item xs={3} sm={3} md={3} lg={3} className={classes.gridItem}>
               <Box className={classes.container}>
+                <Button id={Id} color="black" className={classes.btnCantidades} onClick={removeItemTotal}>
+                  <DeleteForeverIcon fontSize='large' />
+                </Button>
                 <div className={classes.cantidades}>
                   <Button id={Id} variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={removeItem}>
                     <RemoveIcon />

@@ -51,22 +51,16 @@ const useStyles = makeStyles((theme) => ({
         transform: 'rotate(180deg)',
     },
     thumbnail: {
+        display: "flex",
 
-    },
-    thumbnails: {
-        alignItems: "center",
-        textAlign: "center",
     },
     cartaEntera: {
     },
     imagen: {
-        width: "100%",
+        width: "80%",
         textAlign: "center",
         alignItems: "center",
-    },
-    imageList: {
-        width: 200,
-        height: 450,
+        marginLeft: "50px",
     },
     bullet: {
         display: 'inline-block',
@@ -101,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
     cantidades: {
         display: "flex",
         alignItems: "center",
+        alignContent: "center",
         marginLeft: 80,
         marginRight: 70,
 
@@ -112,15 +107,28 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '30px',
         minHeight: '30px',
 
+
     },
     lblCantidad: {
         alignItems: "center",
         textAlign: "center",
     },
-    cantFotos: {
+    imagenesChicas: {
         display: "flex",
+        width: "15%",
+        marginLeft: "25px",
 
+    },
+    imagenesRestantes: {
+        width: "15%",
+        marginLeft: "25px",
+        alignItems: "center",
+        verticalAlign: "center",
+        textAlign: "center",
+        backgroundColor: "#37474f",
+        color: "white",
         fontSize: "2.4rem",
+        paddingTop: "10px"
     },
 
 }));
@@ -130,11 +138,15 @@ export default function ProductDetail() {
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
     const [{ productDetail }, dispatch] = useStateValue();
+    const [cantidad, setCantidad] = useState(productDetail[0].cantidad);
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
     const addToBasket = () => {
+        let nueva = cantidad + 1;
+        setCantidad(nueva);
         dispatch({
             type: actionType.ADD_TO_BASKET,
             item: {
@@ -152,25 +164,30 @@ export default function ProductDetail() {
 
     }
 
-    const removeItem = () => dispatch({
-        type: actionType.REMOVE_ITEM,
-        id: productDetail[0].Id,
-    })
+    const removeItem = () => {
+        let nueva = cantidad - 1;
+        setCantidad(nueva);
+        dispatch({
+            type: actionType.REMOVE_ITEM,
+            id: productDetail[0].Id,
+        })
+    }
 
 
     return (
         <div className={classes.root}>
-            <Grid container spacing={2}>
-                <Grid item lg={8} md={7} sm={7} xs={12}>
-                    <div className={classes.imagen}><img src={productDetail[0].imagenes[0].link_imagen} width="100%"></img></div>
+            <Grid alignItems="center" justifyContent="center" container spacing={2}>
+                <Grid item lg={1} md={1} sm={1} xs={1}></Grid>
+                <Grid item lg={6} md={6} sm={6} xs={12}>
+                    <div>
+                        <img className={classes.imagen} src={productDetail[0].imagenes[0].link_imagen}></img>
+                    </div>
                     <div className={classes.thumbnail}>
-                        <div className={classes.cantFotos} >
-                            <img src={productDetail[0].imagenes[0].link_imagen} width="20%"></img>
-                            <img src={productDetail[0].imagenes[0].link_imagen} width="20%"></img>
-                            <img src={productDetail[0].imagenes[0].link_imagen} width="20%"></img>
-                            <img src={productDetail[0].imagenes[0].link_imagen} width="20%"></img>
-                            <div>+21</div>
-                        </div>
+                        <img className={classes.imagenesChicas} src={productDetail[0].imagenes[0].link_imagen}></img>
+                        <img className={classes.imagenesChicas} src={productDetail[0].imagenes[0].link_imagen}></img>
+                        <img className={classes.imagenesChicas} src={productDetail[0].imagenes[0].link_imagen}></img>
+                        <img className={classes.imagenesChicas} src={productDetail[0].imagenes[0].link_imagen}></img>
+                        <div className={classes.imagenesRestantes} >+21</div>
                     </div>
                 </Grid>
                 <Grid item lg={3} md={4} sm={5} xs={12} >
@@ -206,16 +223,27 @@ export default function ProductDetail() {
 
                             </Typography>
                             <div className={classes.cantidades}>
+                                <Grid container alignItems="center" justifyContent="center" >
 
-                                <Button variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={removeItem}>
-                                    <RemoveIcon />
-                                </Button>
-                                <Typography component="div" variant="h2" className={classes.lblCantidad} >
-                                    {productDetail[0].cantidad}
-                                </Typography>
-                                <Button variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={addToBasket}>
-                                    <AddIcon />
-                                </Button>
+                                    <Grid item lg={1} md={1}>
+                                        <Button variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={removeItem}>
+                                            <RemoveIcon />
+                                        </Button>
+                                    </Grid>
+
+                                    <Grid item lg={10} md={10} >
+                                        <Typography component="div" variant="h2" className={classes.lblCantidad} >
+                                            {cantidad}
+                                        </Typography>
+                                    </Grid>
+
+                                    <Grid item lg={1} md={1} >
+                                        <Button variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={addToBasket}>
+                                            <AddIcon />
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
 
                             </div>
                             <Button className={classes.boton} variant="contained" color="primary">
@@ -228,9 +256,13 @@ export default function ProductDetail() {
                         </div>
                     </Card>
                 </Grid>
+                <Grid item lg={1} md={1} sm={1} xs={1}></Grid>
+
             </Grid>
             <Grid container spacing={6} >
-                <Grid item lg={6} md={4} sm={12} xs={12} >
+                <Grid item lg={1} md={1} sm={1} xs={1} >
+                </Grid>
+                <Grid item lg={10} md={10} sm={12} xs={12} >
                     <Card className={classes.root} >
                         <CardHeader
 

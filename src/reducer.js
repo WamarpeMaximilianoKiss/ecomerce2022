@@ -19,6 +19,7 @@ export const actionType = {
     SET_CATEGORIES: "SET_CATEGORIES",
     SET_PROD_CAT: "SET_PROD_CAT",
     SET_PROD_DETAIL: "SET_PROD_DETAIL",
+    REMOVE_ITEM_TOTAL: "REMOVE_ITEM_TOTAL",
 }
 
 export const getBasketTotal = (basket) => {
@@ -69,7 +70,6 @@ const reducer = (state, action) => {
                 }
 
             }
-
         case "REMOVE_ITEM":
             const index = state.basket.findIndex(basketItem => basketItem.id === action.id);
             let newBasket = [...state.basket];
@@ -94,7 +94,6 @@ const reducer = (state, action) => {
                 ...state,
                 basket: newBasket,
             };
-
         case "SET_USER":
             return {
                 ...state,
@@ -126,12 +125,18 @@ const reducer = (state, action) => {
                 products: action.products
             };
         case "SET_PROD_DETAIL":
-            console.log("Estado: ", state);
-            console.log("Action: ", action);
-
             return {
                 ...state,
                 productDetail: [action.item],
+            };
+        case "REMOVE_ITEM_TOTAL":
+            const indexRemove = state.basket.findIndex(basketItem => basketItem.id === action.id);
+            let basketAux = [...state.basket];
+            basketAux.splice(indexRemove, 1);
+
+            return {
+                ...state,
+                basket: basketAux,
             };
         default:
             console.log("default!!");

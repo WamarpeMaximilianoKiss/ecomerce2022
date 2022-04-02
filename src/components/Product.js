@@ -103,6 +103,17 @@ export default function Product({
   };
 
   const addToDetail = () => {
+
+    let cantidad = 0;
+    for (let index = 0; index < basket?.length; index++) {
+      const element = basket[index];
+      if (element.Id === Id) {
+        cantidad = element.cantidad;
+      }
+
+    }
+    if (cantidad == 0)
+      cantidad++;
     dispatch({
       type: actionType.SET_PROD_DETAIL,
       item: {
@@ -113,7 +124,7 @@ export default function Product({
         categoria,
         colores,
         imagenes,
-        cantidad: 1
+        cantidad: cantidad
       }
     });
     console.log("Detalle", productDetail);

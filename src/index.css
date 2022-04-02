@@ -3,42 +3,55 @@
   div.tituloEmpresa {
     font-size: 50px;
     color: black;
-    letter-spacing: 3px; 
+    letter-spacing: 3px;
+  }
+
+  div.tituloCategoria {
+    font-size: 30px;
+    color: black;
+    letter-spacing: 3px;
   }
 }
+
 @media screen and (max-width: 500px) {
   .containerNav {
     width: 100%;
   }
+
   .containerLogo {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
   }
+
   .containerUserChart {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   .button {
     width: 100%;
     display: flex;
     justify-content: center;
   }
 }
+
 @media screen and (min-width: 500px) {
   .containerNav {
     width: 100%;
     display: flex;
     flex-direction: row;
   }
+
   .containerLogo {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
   }
+
   .containerUserChart {
     display: flex;
     flex-direction: row;
@@ -52,16 +65,21 @@
     font-size: 30px;
     color: black;
   }
+
+  div.tituloCategoria {
+    font-size: 30px;
+    color: black;
+  }
 }
 
-*{
+* {
   margin: 0;
   padding: 0;
-  
+
 }
 
 body {
-  
+
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

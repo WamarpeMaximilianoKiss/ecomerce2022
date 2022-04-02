@@ -92,10 +92,11 @@ export default function Categories(props) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const handleChange = (event, newValue) => {
+    const MoverTo = (event, newValue) => {
+        var element = document.getElementById("seccion");
+        element.scrollIntoView({ block: "end", behavior: "smooth" });
         setValue(newValue);
     };
-
 
     let condTabOrientation;
     if (windowDimensions.width < 600) {
@@ -109,7 +110,7 @@ export default function Categories(props) {
             <AppBar position="static" color="default">
                 <Tabs
                     value={value}
-                    onChange={handleChange}
+                    onChange={MoverTo}
                     indicatorColor="primary"
                     textColor="primary"
                     variant="scrollable"
@@ -144,8 +145,10 @@ export default function Categories(props) {
                                 ))
                             }
                         </Grid>
+                        <div id='seccion'>
 
-                        <Products id_cate={item.Id} baseURL={props.baseURL} />
+                            <Products categoria={item.nombre} id_cate={item.Id} baseURL={props.baseURL} />
+                        </div>
                     </TabPanel>
                 ))
             }

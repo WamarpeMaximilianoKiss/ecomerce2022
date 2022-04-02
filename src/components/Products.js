@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Product from './Product';
 import axios from "axios";
+import { Divider, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -10,15 +11,13 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     backgroundColor: "whitesmoke",
   },
-
-
-
 }));
+
+
 
 export default function Products(props) {
   const classes = useStyles();
   const [products, setProducts] = React.useState(null);
-
 
   React.useEffect(() => {
     axios.get(props.baseURL + "productos/productos/cat/" + props.id_cate).then((response) => {
@@ -28,6 +27,12 @@ export default function Products(props) {
 
   return (
     <div className={classes.root}>
+      <div className='tituloCategoria'>
+        {props.categoria}
+
+      </div>
+      <Divider></Divider>
+      <br></br>
       <Grid container spacing={3}>
         {
           products?.map((product) => (
