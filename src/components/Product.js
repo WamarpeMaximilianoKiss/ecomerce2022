@@ -82,13 +82,23 @@ const useStyles = makeStyles((theme) => ({
     acciones: {
       marginButton: "2px"
     }
+  },
+  nombreProductoOferta: {
+    backgroundColor: "red",
+    marginLeft: "15px",
+    subtitle1: {
+      fontSize: 12,
+    },
+    acciones: {
+      marginButton: "2px"
+    }
   }
 
 }));
 
 
 export default function Product({
-  product: { Id, nombre, descripcion, importe_venta, categoria, colores, imagenes }
+  product: { Id, nombre, descripcion, importe_venta, categoria, colores, imagenes, id_producto_tipo, producto_tipo }
 }) {
   const classes = useStyles();
   const [{ basket, productDetail }, dispatch] = useStateValue();
@@ -124,7 +134,9 @@ export default function Product({
         categoria,
         colores,
         imagenes,
-        cantidad: cantidad
+        cantidad: cantidad,
+        id_producto_tipo,
+        producto_tipo,
       }
     });
     console.log("Detalle", productDetail);
@@ -144,13 +156,16 @@ export default function Product({
         categoria,
         colores,
         imagenes,
-        cantidad: 1
+        cantidad: 1,
+        id_producto_tipo,
+        producto_tipo,
       }
     })
   }
 
   return (
     <div>
+      <div class="cr cr-top cr-left cr-sticky cr-red">Hello</div>
       <Card className={classes.root} onClick={addToDetail}>
 
         <Carousel imagenes={imagenes} dots={true} infinite={true} speed={100} slidesToShow={1} slidesToScroll={1} autoplay={false} width={300} height={200}>
@@ -176,9 +191,17 @@ export default function Product({
         >
           {accounting.formatMoney(importe_venta)}
         </Typography>
-        <Typography className={classes.nombreProducto} variant="body2" >
-          {nombre}
-        </Typography>
+        {
+          id_producto_tipo == 2 ?
+            <Typography className={classes.nombreProductoOferta} variant="body2" >
+              {nombre}
+            </Typography>
+            :
+            <Typography className={classes.nombreProducto} variant="body2" >
+              {nombre}
+            </Typography>
+        }
+
 
         <CardActions disableSpacing className={classes.acciones}>
 

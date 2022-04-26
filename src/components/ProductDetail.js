@@ -23,6 +23,8 @@ import { green } from '@material-ui/core/colors';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import DoneIcon from '@material-ui/icons/Done';
+import ImageListItemBar from '@material-ui/core/ImageListItemBar';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 import { actionType } from '../reducer';
 
@@ -52,84 +54,83 @@ const useStyles = makeStyles((theme) => ({
     },
     thumbnail: {
         display: "flex",
+        width: "120px"
 
     },
     cartaEntera: {
+
+
     },
     imagen: {
-        width: "80%",
+        width: "60%",
         textAlign: "center",
-        alignItems: "center",
-        marginLeft: "50px",
+        alignContent: "center",
+        width: "500px",
+        height: "400px",
+        borderRadius: 10
     },
     bullet: {
         display: 'inline-block',
         margin: '0 2px',
         transform: 'scale(0.8)',
     },
+    imageList: {
+        flexWrap: 'nowrap',
+        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+        transform: 'translateZ(0)',
+    },
+    imageListItem: {
+        borderRadius: 10
+
+    },
     title: {
         fontSize: 24,
         color: "#eceff1",
         textAlign: "left"
     },
+    titleBar: {
+        background:
+            'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+    },
     pos: {
         marginBottom: 12,
     },
     botones: {
-        textAlign: "center",
     },
     boton: {
         width: 200,
+        marginBlock: 5
     },
     cartaPrecio: {
         backgroundColor: "#eceff1",
         alignItems: "center",
         textAlign: "center",
         borderRadius: 10,
+        minHeight: 500,
+        boxShadow: "3px 4px 23px 3px #888888"
+
     },
     cardheader: {
         backgroundColor: "#455a64",
         color: "#fff"
-
     },
     cantidades: {
         display: "flex",
-        alignItems: "center",
-        alignContent: "center",
-        marginLeft: 80,
-        marginRight: 70,
-
     },
     btnCantidades: {
         display: "flex",
-        maxWidth: '30px',
-        maxHeight: '30px',
-        minWidth: '30px',
-        minHeight: '30px',
-
+        maxWidth: 20,
 
     },
     lblCantidad: {
-        alignItems: "center",
+        margin: 20
+    },
+    gridAction: {
+    },
+    contenedor_imagen: {
+        alignContent: "center",
         textAlign: "center",
-    },
-    imagenesChicas: {
-        display: "flex",
-        width: "15%",
-        marginLeft: "25px",
-
-    },
-    imagenesRestantes: {
-        width: "15%",
-        marginLeft: "25px",
-        alignItems: "center",
-        verticalAlign: "center",
-        textAlign: "center",
-        backgroundColor: "#37474f",
-        color: "white",
-        fontSize: "2.4rem",
-        paddingTop: "10px"
-    },
+    }
 
 }));
 
@@ -139,11 +140,18 @@ export default function ProductDetail() {
     const [expanded, setExpanded] = useState(false);
     const [{ productDetail }, dispatch] = useStateValue();
     const [cantidad, setCantidad] = useState(productDetail[0].cantidad);
+    const [imageMain, setImageMain] = useState(null);
 
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+
+    const imageSelect = (item) => {
+        alert(item.id)
+        setImageMain(item.link_imagen);
+    }
+
     const addToBasket = () => {
         let nueva = cantidad + 1;
         setCantidad(nueva);
@@ -165,32 +173,45 @@ export default function ProductDetail() {
     }
 
     const removeItem = () => {
-        let nueva = cantidad - 1;
-        setCantidad(nueva);
-        dispatch({
-            type: actionType.REMOVE_ITEM,
-            id: productDetail[0].Id,
-        })
+        if (cantidad > 1) {
+            let nueva = cantidad - 1;
+            setCantidad(nueva);
+            dispatch({
+                type: actionType.REMOVE_ITEM,
+                id: productDetail[0].Id,
+            })
+        }
     }
 
 
     return (
         <div className={classes.root}>
-            <Grid alignItems="center" justifyContent="center" container spacing={2}>
+            <Grid container spacing={2}>
                 <Grid item lg={1} md={1} sm={1} xs={1}></Grid>
-                <Grid item lg={6} md={6} sm={6} xs={12}>
-                    <div>
-                        <img className={classes.imagen} src={productDetail[0].imagenes[0].link_imagen}></img>
+                <Grid item lg={5} md={6} sm={6} xs={12} className={classes.gridAction}>
+                    <div className={classes.contenedor_imagen}   >
+                        <img className={classes.imagen} src={imageMain}></img>
                     </div>
-                    <div className={classes.thumbnail}>
-                        <img className={classes.imagenesChicas} src={productDetail[0].imagenes[0].link_imagen}></img>
-                        <img className={classes.imagenesChicas} src={productDetail[0].imagenes[0].link_imagen}></img>
-                        <img className={classes.imagenesChicas} src={productDetail[0].imagenes[0].link_imagen}></img>
-                        <img className={classes.imagenesChicas} src={productDetail[0].imagenes[0].link_imagen}></img>
-                        <div className={classes.imagenesRestantes} >+21</div>
+                    <div >
+                        <ImageList className={classes.imageList} cols={2.5}>
+                            {productDetail[0]?.imagenes?.map((item) => (
+                                <ImageListItem key={item.id}
+                                    onClick={() => imageSelect(item)}>
+                                    <img id={item.id} className={classes.imageListItem} src={item.link_imagen} />
+                                    <ImageListItemBar
+                                        classes={{
+                                            root: classes.titleBar,
+                                        }}
+
+                                    />
+                                </ImageListItem>
+                            ))}
+                        </ImageList>
                     </div>
                 </Grid>
-                <Grid item lg={3} md={4} sm={5} xs={12} >
+                <Grid item lg={1} md={1} sm={1} xs={1}></Grid>
+
+                <Grid item lg={3} md={4} sm={5} xs={12} className={classes.gridAction}  >
                     <Card className={classes.cartaPrecio} >
                         <CardContent className={classes.cardheader}  >
                             <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -225,20 +246,20 @@ export default function ProductDetail() {
                             <div className={classes.cantidades}>
                                 <Grid container alignItems="center" justifyContent="center" >
 
-                                    <Grid item lg={1} md={1}>
-                                        <Button variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={removeItem}>
+                                    <Grid item >
+                                        <Button variant="contained" color="primary" className={classes.btnCantidades} onClick={removeItem}>
                                             <RemoveIcon />
                                         </Button>
                                     </Grid>
 
-                                    <Grid item lg={10} md={10} >
-                                        <Typography component="div" variant="h2" className={classes.lblCantidad} >
+                                    <Grid item  >
+                                        <Typography variant="h2" className={classes.lblCantidad} >
                                             {cantidad}
                                         </Typography>
                                     </Grid>
 
-                                    <Grid item lg={1} md={1} >
-                                        <Button variant="contained" color="primary" size="small" className={classes.btnCantidades} onClick={addToBasket}>
+                                    <Grid item >
+                                        <Button variant="contained" color="primary" className={classes.btnCantidades} onClick={addToBasket}>
                                             <AddIcon />
                                         </Button>
                                     </Grid>
@@ -260,12 +281,11 @@ export default function ProductDetail() {
 
             </Grid>
             <Grid container spacing={6} >
-                <Grid item lg={1} md={1} sm={1} xs={1} >
+                <Grid item lg={1} md={1} sm={1} xs={12} >
                 </Grid>
                 <Grid item lg={10} md={10} sm={12} xs={12} >
                     <Card className={classes.root} >
                         <CardHeader
-
                             action={
                                 <IconButton aria-label="settings">
                                     <MoreVertIcon />

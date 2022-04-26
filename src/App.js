@@ -18,7 +18,7 @@ import ProductDetail from './components/ProductDetail';
 function App() {
   const baseURLTest = "http://localhost:9000/api/";
   const baseURLProd = "https://apiplayabrava.herokuapp.com/api/";
-  const baseURL = baseURLProd;
+  const baseURL = baseURLTest;
 
 
   const [{ user }, dispatch] = useStateValue();
